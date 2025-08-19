@@ -1,4 +1,5 @@
 from django.db import models
+
 from common.models.base import Base
 from common.models.timestamped import TimeStamped
 
