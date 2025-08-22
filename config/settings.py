@@ -29,9 +29,11 @@ environ.Env.read_env(BASE_DIR / '.env', overrides=True)
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG', default=True)
+DEBUG = env.bool('DEBUG', default=True)
 
-ALLOWED_HOSTS = env('ALLOWED_HOSTS', default=['*'])
+print(DEBUG, type(DEBUG))
+
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
 URL = env('URL')
 
@@ -63,7 +65,10 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates',
+            BASE_DIR / 'templates/errors',    
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -93,6 +98,7 @@ DATABASES = {
 }
 
 # mongoengine connection
+
 connect(
     db=env('MONGO_DB_DATABASE'),
     host=env('MONGO_DB_HOST'),
