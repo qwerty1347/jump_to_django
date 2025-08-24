@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+import socket
 import environ
 
 from mongoengine import connect
@@ -29,11 +30,13 @@ environ.Env.read_env(BASE_DIR / '.env', overrides=True)
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=True)
-
-print(DEBUG, type(DEBUG))
+DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
+
+if DEBUG:
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1"]
 
 URL = env('URL')
 
@@ -47,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'apps.pybo',
 ]
 
@@ -54,6 +58,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -67,7 +72,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'templates',
-            BASE_DIR / 'templates/errors',    
+            BASE_DIR / 'templates/errors',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
