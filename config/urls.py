@@ -21,7 +21,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('pybo/', include('apps.pybo.urls')),
+    path('pybo/', include('apps.pybo.urls', namespace="pybo")),
 ]
 
 # debug-toolbar
@@ -30,4 +30,5 @@ if settings.DEBUG:
     urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
 
 # errors
+handler404 = 'common.views.errors.custom_404_error'
 handler500 = 'common.views.errors.custom_500_error'
