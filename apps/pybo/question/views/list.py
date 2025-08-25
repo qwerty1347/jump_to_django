@@ -8,11 +8,11 @@ from common.constants.template import TemplateConstants
 question_service = QuestionService()
 
 
-def index(request):
+def question_list(request):
     try:
         questions = question_service.get_questions()
         context = {'questions': questions}
-        return render(request, TemplateConstants.PYBO['question']['index'], context)
+        return render(request, TemplateConstants.PYBO['question']['list'], context)
         
     except Exception as e:
         print(f"ERROR: {str(e)}")
