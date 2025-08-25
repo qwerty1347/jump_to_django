@@ -1,5 +1,17 @@
-from django.http import HttpResponse
+from django.shortcuts import render
+
+from apps.pybo.question.services.service import QuestionService
+from common.constants.template import TemplateConstants
+
+
+question_service = QuestionService()
 
 
 def index(request):
-    return HttpResponse("Hello, Pybo Question")
+    try:
+        questions = question_service.get_questions()
+        context = {'questions': questions}
+        return render(request, TemplateConstants.TEMPLATES['pybo']['question']['index'], context)
+        
+    except Exception as e:
+        raise e

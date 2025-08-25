@@ -7,4 +7,4 @@ class QuestionService:
         
         
     def get_questions(self):
-        pass
+        return self.repository.get_questions
