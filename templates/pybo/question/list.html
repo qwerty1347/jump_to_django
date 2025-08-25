@@ -8,7 +8,11 @@
 <body>
     <ul>
     {% for question in questions %}
-        <li>{{ question.subject }}</li>
+        <li>
+            <a href="{% url 'pybo:question:detail' question.id %}">
+                {{ question.subject }}
+            </a>
+        </li>
     {% empty %}
         <li>질문이 없습니다.</li>
     {% endfor %}
