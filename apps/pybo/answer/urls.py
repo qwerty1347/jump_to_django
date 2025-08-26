@@ -6,5 +6,5 @@ from .views import create
 app_name = "answer"
 
 urlpatterns = [
-    path('', create.create_answer, name="create")
+    path('create/<int:question_id>/', create.create_answer, name="create")
 ]
