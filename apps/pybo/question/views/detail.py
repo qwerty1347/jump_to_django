@@ -1,11 +1,10 @@
-import traceback
-
 from http import HTTPStatus
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
 
 from apps.pybo.question.services.service import QuestionService
 from common.constants.template import TemplateConstants
+from common.utils.exception import handle_exception
 
 
 question_service = QuestionService()
@@ -21,6 +20,5 @@ def question_detail(request, question_id: int) -> HttpResponse:
         raise
 
     except Exception as e:
-        print(f"ERROR: {str(e)}")
-        traceback.print_exc()
+        handle_exception(e)
         return render(request, TemplateConstants.ERRORS['500'], status=HTTPStatus.INTERNAL_SERVER_ERROR.value)

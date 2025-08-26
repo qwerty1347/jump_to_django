@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 
 from apps.pybo.answer.forms.create import AnswerCreateForm
 from apps.pybo.answer.services.service import AnswerService
+from common.utils.exception import handle_exception
 
 
 answer_service = AnswerService()
@@ -15,7 +16,7 @@ def create_answer(request, question_id: int):
     form = AnswerCreateForm(request.POST)
 
     if not form.is_valid():
-        return HttpResponse("hello, form", status=400)
+        return HttpResponse("hello, form", status=422)
 
     try:
         answer =  answer_service.create_answer(question_id, form.cleaned_data)
@@ -28,4 +29,4 @@ def create_answer(request, question_id: int):
         raise
 
     except Exception as e:
-        print(f"ERROR: {str(e)}")
+        handle_exception(e)
