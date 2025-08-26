@@ -1,4 +1,5 @@
 from django.db.models.query import QuerySet
+from django.shortcuts import get_object_or_404
 
 from apps.pybo.question.models.question import Question
 
@@ -13,4 +14,4 @@ class QuestionRepository:
 
 
     def get_question(self, question_id: int) -> Question:
-        return Question.objects.get(id=question_id)
+        return get_object_or_404(Question, pk=question_id)
