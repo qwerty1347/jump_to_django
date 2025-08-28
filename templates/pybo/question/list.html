@@ -1,21 +1,17 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question List</title>
-</head>
-<body>
-    <ul>
+{% extends "pybo/common/base.html" %}
+
+{% block title %}Question List{% endblock title %}
+
+{% block content %}
+<ul>
     {% for question in questions %}
-        <li>
-            <a href="{% url 'pybo:question:detail' question.id %}">
-                {{ question.subject }}
-            </a>
-        </li>
+    <li>
+        <a href="{% url 'pybo:question:detail' question.id %}">
+            {{ question.subject }}
+        </a>
+    </li>
     {% empty %}
-        <li>질문이 없습니다.</li>
+    <li>질문이 없습니다.</li>
     {% endfor %}
-    </ul>
-</body>
-</html>
+</ul>
+{% endblock content %}

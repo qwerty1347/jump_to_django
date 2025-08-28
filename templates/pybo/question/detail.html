@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question</title>
+{% extends "pybo/common/base.html" %}
+
+{% block title %}Question{% endblock title %}
+
+{% block head %}
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-</head>
-<body>
+    <link rel="stylesheet" type="text/css" href={% static 'style.css' %}>
+{% endblock head %}
+
+{% block content %}
     <h1>{{ question.subject }}</h1>
     <div>
         {{ question.content }}
@@ -35,5 +35,4 @@
         </div>
         {% endfor %}
     {% endif %}
-</body>
-</html>
+{% endblock content %}
