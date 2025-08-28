@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
 
 from apps.pybo.answer.forms.create import AnswerCreateForm
 from apps.pybo.answer.services.service import AnswerService
@@ -12,9 +13,8 @@ from common.utils.exception import handle_exception
 answer_service = AnswerService()
 
 
+@require_POST
 def create_answer(request, question_id: int):
-    # TODO: POST 외 405 처리
-
     form = AnswerCreateForm(request.POST)
     question_repository = QuestionRepository()
 
