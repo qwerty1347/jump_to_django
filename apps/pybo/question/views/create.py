@@ -21,7 +21,7 @@ def create_question(request) -> HttpResponse:
         form = QuestionCreateForm(request.POST)
 
         if not form.is_valid():
-            return render(request, TemplateConstants.PYBO['question'], {'form': form})
+            return render(request, TemplateConstants.PYBO['question']['create'], {'form': form})
 
         try:
             question = question_service.create_question(form.cleaned_data)

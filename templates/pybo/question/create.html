@@ -7,7 +7,31 @@
     <h5 class="my-3 border-bottom pb-2">질문등록</h5>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        <div class="mb-3">
+            <label for="subject" class="form-label">제목</label>
+            <input type="text" name="subject" id="subject" value="{{ form.subject.value|default_if_none:'' }}" class="form-control">
+
+            {% if form.subject.errors %}
+            <div class="text-danger small mt-1">
+                {% for error in form.subject.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label for="content" class="form-label">내용</label>
+            <textarea name="content" id="content" rows="10" class="form-control">{{ form.content.value|default_if_none:'' }}</textarea>
+
+            {% if form.content.errors %}
+            <div class="text-danger small mt-1">
+                {% for error in form.content.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
         <button type="submit" class="btn btn-primary">등록하기</button>
     </form>
 </div>
