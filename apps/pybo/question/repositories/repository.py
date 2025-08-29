@@ -15,3 +15,7 @@ class QuestionRepository:
 
     def get_question(self, question_id: int) -> Question:
         return get_object_or_404(Question, pk=question_id)
+
+
+    def create_question(self, form_data: dict) -> Question:
+        return Question.objects.create(**form_data)
