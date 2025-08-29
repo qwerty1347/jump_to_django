@@ -1,0 +1,14 @@
+{% extends "pybo/common/base.html" %}
+
+{% block title %}Question Create{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h5 class="my-3 border-bottom pb-2">질문등록</h5>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">등록하기</button>
+    </form>
+</div>
+{% endblock content %}
