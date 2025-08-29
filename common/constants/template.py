@@ -8,5 +8,6 @@ class TemplateConstants:
         'question': {
             'list': 'pybo/question/list.html',
             'detail': 'pybo/question/detail.html',
+            'create': 'pybo/question/create.html',
         },
     }
