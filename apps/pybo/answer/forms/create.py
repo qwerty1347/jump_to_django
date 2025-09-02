@@ -1,5 +1,13 @@
 from django import forms
 
+from apps.pybo.answer.models.answer import Answer
 
-class AnswerCreateForm(forms.Form):
-    content = forms.CharField(max_length=200, required=True)
+
+class AnswerCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Answer
+        fields = ['content']
+        labels = {
+            'content': '답변내용',
+        }

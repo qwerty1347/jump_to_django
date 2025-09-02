@@ -21,10 +21,5 @@ class QuestionService:
         return self.repository.get_question(question_id)
 
 
-    def get_create_from(self, request) -> HttpResponse:
-        form = QuestionCreateForm()
-        return render(request, TemplateConstants.PYBO['question']['create'], {'form': form})
-
-
     def create_question(self, form_data: dict) -> Question:
         return self.repository.create_question(form_data)

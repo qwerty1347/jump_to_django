@@ -1,6 +1,6 @@
-from http import HTTPStatus
+from django.contrib import messages
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 
 from apps.pybo.question.forms.create import QuestionCreateForm
@@ -11,25 +11,25 @@ from common.utils.exception import handle_exception
 
 question_service = QuestionService()
 
+
 @require_http_methods(["GET", "POST"])
 def create_question(request) -> HttpResponse:
-
     if request.method == "GET":
-        return question_service.get_create_from(request)
+        form = QuestionCreateForm()
+        return render(request, TemplateConstants.PYBO['question']['create'], {'form': form})
 
     elif request.method == "POST":
         form = QuestionCreateForm(request.POST)
 
-        if not form.is_valid():
+        if form.is_valid():
+            try:
+                question = question_service.create_question(form.cleaned_data)
+                messages.success(request, "질문 등록 완료")
+                return redirect('pybo:question:detail', question_id=question.id)
+
+            except Exception as e:
+                handle_exception(e)
+                messages.error(request, "질문 생성 오류")
+
+        else:
             return render(request, TemplateConstants.PYBO['question']['create'], {'form': form})
-
-        try:
-            question = question_service.create_question(form.cleaned_data)
-            print(question)
-
-        except Exception as e:
-            handle_exception(e)
-            return render(request, TemplateConstants.ERRORS['500'], status=HTTPStatus.INTERNAL_SERVER_ERROR.value)
-
-
-    return HttpResponse("Hello, Django Pybo!")

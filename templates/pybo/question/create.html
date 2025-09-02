@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container">
     <h5 class="my-3 border-bottom pb-2">질문등록</h5>
-    <form method="post">
+    <form id="questionForm" method="post">
         {% csrf_token %}
         <div class="mb-3">
             <label for="subject" class="form-label">제목</label>
@@ -33,6 +33,23 @@
             {% endif %}
         </div>
         <button type="submit" class="btn btn-primary">등록하기</button>
+        <button type="button" id="list-btn" class="btn btn-dark">목록</button>
     </form>
 </div>
 {% endblock content %}
+
+{% block script %}
+    <script>
+        function goToQuestionList() {
+            $('#list-btn').click(function (e) {
+                e.preventDefault();
+                const questionList = "{% url 'pybo:question:list' %}";
+                location.href = questionList;
+            });
+        }
+
+        $(document).ready(function () {
+            goToQuestionList();
+        });
+    </script>
+{% endblock script %}

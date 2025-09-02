@@ -32,23 +32,38 @@
         </div>
         {% endfor %}
 
-        <form action="{% url 'pybo:answer:create' question.id %}" method="post">
+        <form id="answerForm" action="{% url 'pybo:answer:create' question.id %}" method="post">
             {% csrf_token %}
             <div class="mb-3">
                 <label for="content" class="form-label">답변내용</label>
-                <textarea name="content" id="content" rows="15"></textarea>
+                <textarea name="content" id="content" rows="15">{{ form.content.value|default_if_none:"" }}</textarea>
+
+                {% if form.content %}
+                <div class="text-danger small mt-1">
+                    {% for error in form.content.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
-            <input type="submit" value="답변등록" class="btn btn-primary">
-
-            {% for error in form.content.errors %}
-            <div class="text-red-500">{{ error }}</div>
-            {% endfor %}
+            <button type="submit" class="btn btn-primary">답변등록</button>
+            <button type="button" id="list-btn" class="btn btn-dark">목록</button>
         </form>
-
-        {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
     </div>
 {% endblock content %}
+
+{% block script %}
+    <script>
+        function goToQuestionList() {
+            $('#list-btn').click(function (e) {
+                e.preventDefault();
+                const questionList = "{% url 'pybo:question:list' %}";
+                location.href = questionList;
+            });
+        }
+
+        $(document).ready(function() {
+            goToQuestionList();
+        });
+    </script>
+{% endblock script %}
