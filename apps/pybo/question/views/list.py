@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from apps.pybo.question.services.service import QuestionService
@@ -9,10 +10,9 @@ from common.utils.exception import handle_exception
 question_service = QuestionService()
 
 
-def question_list(request):
+def question_list(request) -> HttpResponse:
     try:
-        questions = question_service.get_questions()
-        context = {'questions': questions}
+        context = question_service.get_paginated_questions(request)
         return render(request, TemplateConstants.PYBO['question']['list'], context)
 
     except Exception as e:
