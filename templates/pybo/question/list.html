@@ -1,5 +1,7 @@
 {% extends "pybo/common/base.html" %}
 
+{% load pagination %}
+
 {% block title %}Question List{% endblock title %}
 
 {% block content %}
@@ -15,7 +17,7 @@
         <tbody>
             {% for question in page_obj %}
             <tr>
-                <td>{{ forloop.counter }}</td>
+                <td>{{ page_obj|descending_index:forloop.counter0 }}</td>
                 <td>
                     <a href="{% url 'pybo:question:detail' question.id %}">{{ question.subject }}</a>
                 </td>
