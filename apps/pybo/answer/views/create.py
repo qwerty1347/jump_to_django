@@ -1,11 +1,10 @@
 from django.contrib import messages
-from django.http import Http404, HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect
+from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
 from apps.pybo.answer.forms.create import AnswerCreateForm
 from apps.pybo.answer.services.service import AnswerService
-from apps.pybo.question.repositories.repository import QuestionRepository
 from apps.pybo.question.services.service import QuestionService
 from common.constants.template import TemplateConstants
 from common.utils.exception import handle_exception

@@ -14,7 +14,10 @@
 
     {% block head %}{% endblock head %}
 </head>
+
 <body>
+    {% include "pybo/common/nav.html" %}
+
     {% block content %}{% endblock content %}
     {% block script %}{% endblock script %}
 </body>
