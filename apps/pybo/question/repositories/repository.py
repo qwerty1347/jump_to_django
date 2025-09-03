@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404
 
@@ -10,7 +11,7 @@ class QuestionRepository:
 
 
     def get_questions(self) -> QuerySet[Question]:
-        return Question.objects.order_by('-created_at')
+        return Question.objects.annotate(answer_count=Count('answers')).order_by('-created_at')
 
 
     def get_question(self, question_id: int) -> Question:

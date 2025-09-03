@@ -10,7 +10,7 @@ class QuestionService:
         self.repository = QuestionRepository()
 
 
-    def get_paginated_questions(self, request: HttpRequest):
+    def get_paginated_questions(self, request: HttpRequest) -> dict:
         questions = self.repository.get_questions()
         return get_paginated_queryset(list=questions, page=int(request.GET.get('page', 1)))
 
