@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'debug_toolbar',
     'common',
-    'apps.pybo',
+    'apps.common.apps.CommonConfig',
+    'apps.pybo.apps.PyboConfig',
 ]
 
 MIDDLEWARE = [
