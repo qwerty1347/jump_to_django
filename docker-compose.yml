@@ -42,7 +42,7 @@ services:
       - local_network
     environment:
       DB_HOST: jump_to_django-mysql
-      MONGO_DB_HOST: jump_to_django-mongodb      
+      MONGO_DB_HOST: jump_to_django-mongodb
 
 networks:
   local_network:

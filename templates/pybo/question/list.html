@@ -1,0 +1,39 @@
+{% extends "pybo/common/base.html" %}
+
+{% load pagination %}
+
+{% block title %}Question List{% endblock title %}
+
+{% block content %}
+<div class="container my-3">
+    <table class="table">
+        <thead>
+            <tr class="table-dark">
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성일시</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for question in page_obj %}
+            <tr>
+                <td>{{ page_obj|descending_index:forloop.counter0 }}</td>
+                <td>
+                    <a href="{% url 'pybo:question:detail' question.id %}">{{ question.subject }}</a>
+                    {% if question.answer_count > 0 %}
+                    <span class="text-danger small mx-2">{{ question.answer_count }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ question.created_at|date:"Y-m-d H:i:s" }}</td>
+            </tr>
+            {% empty %}
+            <td>
+                <td colspan="3">질문이 없습니다.</td>
+            </td>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% include "common/pagination.html" %}
+    <a href="{% url 'pybo:question:create' %}" class="btn btn-primary">질문 등록</a>
+</div>
+{% endblock content %}
