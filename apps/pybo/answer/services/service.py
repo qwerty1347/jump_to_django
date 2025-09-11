@@ -6,10 +6,10 @@ from apps.pybo.question.repositories.repository import QuestionRepository
 
 class AnswerService:
     def __init__(self):
-        self.repository = AnswerRepository()
+        self.answer_repository = AnswerRepository()
         self.question_repository = QuestionRepository()
 
 
     def create_answer(self, question_id: int, form: AnswerCreateForm) -> Answer:
         question = self.question_repository.get_question(question_id)
-        return self.repository.create_answer(question, form)
+        return self.answer_repository.create_answer(question, form)

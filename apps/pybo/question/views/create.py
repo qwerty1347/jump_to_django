@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 
@@ -13,7 +13,7 @@ question_service = QuestionService()
 
 
 @require_http_methods(["GET", "POST"])
-def create_question(request) -> HttpResponse:
+def create_question(request: HttpRequest) -> HttpResponse:
     if request.method == "GET":
         form = QuestionCreateForm()
         return render(request, TemplateConstants.PYBO['question']['create'], {'form': form})

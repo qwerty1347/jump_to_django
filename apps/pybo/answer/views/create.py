@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_POST
 
@@ -15,7 +15,7 @@ answer_service = AnswerService()
 
 
 @require_POST
-def create_answer(request, question_id: int) -> HttpResponse:
+def create_answer(request: HttpRequest, question_id: int) -> HttpResponse:
     question = question_service.get_question(question_id)
     form = AnswerCreateForm(request.POST)
 
