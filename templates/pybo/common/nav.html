@@ -1,7 +1,14 @@
 <nav class="navbar navbar-light bg-light border-bottom">
     <div class="container-fluid d-flex align-items-center">
         <a href="#" class="navbar-brand">Pybo</a>
+        {% if user.is_authenticated %}
+        <form action="{% url 'pybo:logout' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link nav-link">로그아웃</button>
+        </form>
+        {% else %}
         <a href="{% url 'pybo:login' %}" class="nav-link ms-2">로그인</a>
+        {% endif %}
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

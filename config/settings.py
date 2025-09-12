@@ -165,4 +165,5 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 로그인 뷰, 로그인 성공 시 이동하는 URL
-LOGIN_REDIRECT_URL = 'pybo:index'
+LOGIN_REDIRECT_URL = 'pybo:question:list'
+LOGOUT_REDIRECT_URL = 'pybo:question:list'
