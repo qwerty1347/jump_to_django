@@ -5,6 +5,10 @@ class TemplateConstants:
     }
 
     PYBO = {
+        'user': {
+            'login': 'pybo/user/login.html',
+            'signup': 'pybo/user/signup.html',
+        },
         'question': {
             'list': 'pybo/question/list.html',
             'detail': 'pybo/question/detail.html',
