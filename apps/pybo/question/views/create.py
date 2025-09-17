@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
@@ -12,6 +13,7 @@ from common.utils.exception import handle_exception
 question_service = QuestionService()
 
 
+@login_required(login_url='pybo:login')
 @require_http_methods(["GET", "POST"])
 def create_question(request: HttpRequest) -> HttpResponse:
     if request.method == "GET":

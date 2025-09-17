@@ -1,7 +1,8 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods
 
 from apps.pybo.answer.forms.create import AnswerCreateForm
 from apps.pybo.answer.services.service import AnswerService
@@ -14,24 +15,29 @@ question_service = QuestionService()
 answer_service = AnswerService()
 
 
-@require_POST
+@login_required(login_url="pybo:login")
+@require_http_methods(["GET", "POST"])
 def create_answer(request: HttpRequest, question_id: int) -> HttpResponse:
-    question = question_service.get_question(question_id)
-    form = AnswerCreateForm(request.POST)
+    if request.method == "GET":
+        return redirect('pybo:question:detail', question_id=question_id)
 
-    if form.is_valid():
-        try:
-            answer_service.create_answer(question_id, form, request.user)
-            messages.success(request, "답변 등록 완료")
-            return redirect('pybo:question:detail', question_id=question_id)
+    elif request.method == "POST":
+        question = question_service.get_question(question_id)
+        form = AnswerCreateForm(request.POST)
 
-        except Http404:
-            raise
+        if form.is_valid():
+            try:
+                answer_service.create_answer(question_id, form, request.user)
+                messages.success(request, "답변 등록 완료")
+                return redirect('pybo:question:detail', question_id=question_id)
 
-        except Exception as e:
-            handle_exception(e)
-            messages.error(request, "답변 생성 오류")
+            except Http404:
+                raise
 
-    else:
-        context = {'form': form, 'question': question}
-        return render(request, TemplateConstants.PYBO['question']['detail'], context)
+            except Exception as e:
+                handle_exception(e)
+                messages.error(request, "답변 생성 오류")
+
+        else:
+            context = {'form': form, 'question': question}
+            return render(request, TemplateConstants.PYBO['question']['detail'], context)
