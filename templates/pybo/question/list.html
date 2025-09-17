@@ -27,9 +27,9 @@
                 <td>{{ question.created_at|date:"Y-m-d H:i:s" }}</td>
             </tr>
             {% empty %}
-            <td>
-                <td colspan="3">질문이 없습니다.</td>
-            </td>
+            <tr>
+                <td colspan="3" class="text-center">질문이 없습니다.</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>

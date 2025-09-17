@@ -21,7 +21,7 @@ def create_answer(request: HttpRequest, question_id: int) -> HttpResponse:
 
     if form.is_valid():
         try:
-            answer_service.create_answer(question_id, form)
+            answer_service.create_answer(question_id, form, request.user)
             messages.success(request, "답변 등록 완료")
             return redirect('pybo:question:detail', question_id=question_id)
 

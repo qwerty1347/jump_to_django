@@ -23,7 +23,7 @@ def create_question(request: HttpRequest) -> HttpResponse:
 
         if form.is_valid():
             try:
-                question = question_service.create_question(form.cleaned_data)
+                question = question_service.create_question(form.cleaned_data, request.user)
                 messages.success(request, "질문 등록 완료")
                 return redirect('pybo:question:detail', question_id=question.id)
 

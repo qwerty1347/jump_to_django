@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.http import HttpRequest
 
 from apps.pybo.question.models.question import Question
@@ -19,5 +20,6 @@ class QuestionService:
         return self.question_repository.get_question(question_id)
 
 
-    def create_question(self, form_data: dict) -> Question:
+    def create_question(self, form_data: dict, user: User) -> Question:
+        form_data['author'] = user
         return self.question_repository.create_question(form_data)
