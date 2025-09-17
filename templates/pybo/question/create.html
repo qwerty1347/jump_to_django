@@ -5,7 +5,13 @@
 {% block content %}
 <div class="container">
     <h5 class="my-3 border-bottom pb-2">질문등록</h5>
-    <form id="questionForm" method="post">
+    <form id="questionForm"
+        action="{% if form.instance.pk %}
+                    {% url 'pybo:question:edit' form.instance.pk %}
+                {% else %}
+                    {% url 'pybo:question:create' %}
+                {% endif %}"
+        method="post">
         {% csrf_token %}
         <div class="mb-3">
             <label for="subject" class="form-label">제목</label>
@@ -32,9 +38,25 @@
             </div>
             {% endif %}
         </div>
-        <button type="submit" class="btn btn-primary">등록하기</button>
+        <button type="submit" class="btn btn-primary">
+            {{ form.instance.pk|yesno:"수정,등록" }}
+        </button>
         <button type="button" id="list-btn" class="btn btn-dark">목록</button>
     </form>
+
+    {% if messages %}
+    <div class="my-3">
+        {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                <div class="text-danger small">{{ message }}</div>
+            {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                <div class="text-success small">{{ message }}</div>
+            {% else %}
+                <div class="text-secondary small">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
 {% endblock content %}
 

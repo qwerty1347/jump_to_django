@@ -21,6 +21,13 @@
                         <div>{{ question.created_at }}</div>
                     </div>
                 </div>
+                {% if request.user == question.author %}
+                <form>
+                <div class="my-3">
+                    <a href="{% url 'pybo:question:edit' question.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
+                    <a href="#" class="btn btn-sm btn-outline-danger">삭제</a>
+                </div>
+                {% endif %}
             </div>
         </div>
 
@@ -35,6 +42,12 @@
                         <div>{{ answer.created_at }}</div>
                     </div>
                 </div>
+                {% if request.user == answer.author %}
+                <div class="my-3">
+                    <a href="#" class="btn btn-sm btn-outline-secondary">수정</a>
+                    <a href="#" class="btn btn-sm btn-outline-danger">삭제</a>
+                </div>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
@@ -53,7 +66,7 @@
                 </div>
                 {% endif %}
             </div>
-            <button type="submit" class="btn btn-primary">답변등록</button>
+            <button type="submit" class="btn btn-primary">등록</button>
             <button type="button" id="list-btn" class="btn btn-dark">목록</button>
         </form>
     </div>

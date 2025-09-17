@@ -20,3 +20,13 @@ class QuestionRepository:
 
     def create_question(self, form_data: dict) -> Question:
         return Question.objects.create(**form_data)
+
+
+    def update_question(self, form_data: dict, question_id: int) -> Question:
+        question = Question.objects.get(pk=question_id)
+
+        for field, value in form_data.items():
+            setattr(question, field, value)
+
+        question.save()
+        return question
