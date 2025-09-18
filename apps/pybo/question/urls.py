@@ -4,6 +4,7 @@ from .views import list
 from .views import detail
 from .views import create
 from .views import edit
+from .views import delete
 
 
 app_name = "question"
@@ -13,4 +14,5 @@ urlpatterns = [
     path('<int:question_id>/', detail.question_detail, name="detail"),
     path('create/', create.create_question, name="create"),
     path('edit/<int:question_id>/', edit.modify_question, name="edit"),
+    path('delete/<int:question_id>', delete.delete_question, name="delete"),
 ]

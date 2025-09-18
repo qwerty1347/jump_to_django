@@ -1,6 +1,7 @@
 from django.db.models import Count
 from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 from apps.pybo.question.models.question import Question
 
@@ -30,3 +31,7 @@ class QuestionRepository:
 
         question.save()
         return question
+
+
+    def delete_question(self, question_id: int) -> int:
+        return Question.objects.filter(pk=question_id).update(is_active=False, deleted_at=timezone.now())

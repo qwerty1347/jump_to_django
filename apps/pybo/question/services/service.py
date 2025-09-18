@@ -46,3 +46,13 @@ class QuestionService:
 
         else:
             raise ValueError
+
+
+    def delete_question(self, request: HttpRequest, question_id: int):
+        question = self.question_repository.get_question(question_id)
+
+        if request.user != question.author:
+            raise PermissionDenied()
+
+        else:
+            self.question_repository.delete_question(question_id)

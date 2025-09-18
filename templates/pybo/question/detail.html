@@ -25,9 +25,12 @@
                 <form>
                 <div class="my-3">
                     <a href="{% url 'pybo:question:edit' question.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
-                    <a href="#" class="btn btn-sm btn-outline-danger">삭제</a>
+                    <a href="#" id="question_delete" data-id="{{ question.id }}" class="btn btn-sm btn-outline-danger">삭제</a>
                 </div>
                 {% endif %}
+
+
+                <!-- error처리 -->
             </div>
         </div>
 
@@ -73,17 +76,42 @@
 {% endblock content %}
 
 {% block script %}
-    <script>
-        function goToQuestionList() {
-            $('#list-btn').click(function (e) {
-                e.preventDefault();
-                const questionList = "{% url 'pybo:question:list' %}";
-                location.href = questionList;
-            });
-        }
-
-        $(document).ready(function() {
-            goToQuestionList();
+<script>
+    function goToQuestionList() {
+        $('#list-btn').click(function (e) {
+            e.preventDefault();
+            const questionList = "{% url 'pybo:question:list' %}";
+            location.href = questionList;
         });
-    </script>
+    }
+
+    function deleteQuestion() {
+        $('#question_delete').click(function (e) {
+            e.preventDefault();
+
+            if (confirm('정말로 삭제하시겠습니까?')) {
+                const id = $(this).data('id');
+
+                $.ajax({
+                    type: "delete",
+                    url: "{% url 'pybo:question:delete' question.id %}",
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response)
+                        alert('삭제완료');
+                        location.href = "{% url 'pybo:question:list' %}"
+                    },
+                    error: function (xhr, error, status) {
+                        alert('요청 처리에 실패했습니다. ' + (xhr.responseJSON?.message ?? '관리자에게 문의해 주세요.') + ' ' + xhr.responseText);
+                    },
+                });
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        goToQuestionList();
+        deleteQuestion();
+    });
+</script>
 {% endblock script %}
