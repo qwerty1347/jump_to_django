@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
+from django.http import HttpRequest
 
 from apps.pybo.answer.forms.create import AnswerCreateForm
 from apps.pybo.answer.models.answer import Answer
@@ -12,6 +14,33 @@ class AnswerService:
         self.question_repository = QuestionRepository()
 
 
-    def create_answer(self, question_id: int, form: AnswerCreateForm, user: User) -> Answer:
-        question = self.question_repository.get_question(question_id)
-        return self.answer_repository.create_answer(question, form, user)
+    def get_answer(self, answer_id: int) -> Answer:
+        return self.answer_repository.get_answer(answer_id)
+
+
+    def create_answer(self, request: HttpRequest, form: AnswerCreateForm, question_id: int) -> Answer:
+        if form.is_valid():
+            question = self.question_repository.get_question(question_id)
+
+            form_data = form.cleaned_data
+            form_data['author'] = request.user
+
+            return self.answer_repository.create_answer(question, form, request.user)
+
+        else:
+            raise ValueError
+
+
+    def update_answer(self, request: HttpRequest, form: AnswerCreateForm, answer_id: int) -> Answer:
+        if form.is_valid():
+            answer = self.answer_repository.get_answer(answer_id)
+
+            if request.user != answer.author:
+                raise PermissionDenied()
+
+            else:
+                form_data = form.cleaned_data
+                return self.answer_repository.update_answer(answer.id, form_data)
+
+        else:
+            raise ValueError

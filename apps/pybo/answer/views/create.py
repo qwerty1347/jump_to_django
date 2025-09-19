@@ -22,22 +22,19 @@ def create_answer(request: HttpRequest, question_id: int) -> HttpResponse:
         return redirect('pybo:question:detail', question_id=question_id)
 
     elif request.method == "POST":
-        question = question_service.get_question(question_id)
         form = AnswerCreateForm(request.POST)
 
-        if form.is_valid():
-            try:
-                answer_service.create_answer(question_id, form, request.user)
-                messages.success(request, "답변 등록 완료")
-                return redirect('pybo:question:detail', question_id=question_id)
+        try:
+            question = answer_service.create_answer(request, form, question_id)
+            return redirect('pybo:question:detail', question_id=question_id)
 
-            except Http404:
-                raise
+        except ValueError:
+            return render(request, TemplateConstants.PYBO['question']['detail'], {'form': form, 'question': question})
 
-            except Exception as e:
-                handle_exception(e)
-                messages.error(request, "답변 생성 오류")
+        except Http404:
+            raise Http404
 
-        else:
-            context = {'form': form, 'question': question}
-            return render(request, TemplateConstants.PYBO['question']['detail'], context)
+        except Exception as e:
+            handle_exception(e)
+            messages.error(request, '답변 생성 오류')
+            return render(request, TemplateConstants.PYBO['question']['detail'], {'form': form, 'question': question})

@@ -6,73 +6,84 @@
 {% block title %}Question{% endblock title %}
 
 {% block head %}
-    <link rel="stylesheet" type="text/css" href={% static 'style.css' %}>
+<link rel="stylesheet" type="text/css" href={% static 'style.css' %}>
 {% endblock head %}
 
 {% block content %}
-    <div class="container my-3">
-        <h2 class="border-bottom py-2">{{ question.subject }}</h2>
-        <div class="card my-3">
-            <div class="card-body">
-                <div class="card-text" style="white-space: pre-line;">{{ question.content }}</div>
-                <div class="d-flex justify-content-end">
-                    <div class="badge bg-light text-dark p-2 text-start">
-                        <div class="mb-2">{{ question.author.username }}</div>
-                        <div>{{ question.created_at }}</div>
-                    </div>
+<div class="container my-3">
+    <h2 class="border-bottom py-2">{{ question.subject }}</h2>
+    <div class="card my-3">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;">{{ question.content }}</div>
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div class="mb-2">{{ question.author.username }}</div>
+                    <div>{{ question.created_at }}</div>
                 </div>
-                {% if request.user == question.author %}
-                <form>
-                <div class="my-3">
-                    <a href="{% url 'pybo:question:edit' question.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
-                    <a href="#" id="question_delete" data-id="{{ question.id }}" class="btn btn-sm btn-outline-danger">삭제</a>
-                </div>
-                {% endif %}
-
-
-                <!-- error처리 -->
             </div>
+            {% if request.user == question.author %}
+            <div class="my-3">
+                <a href="{% url 'pybo:question:edit' question.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
+                <a href="#" id="question_delete" data-id="{{ question.id }}" class="btn btn-sm btn-outline-danger">삭제</a>
+            </div>
+            {% endif %}
         </div>
-
-        <h5 class="border-bottom my-3 py-2">{{ question.answers.count|intcomma }} 개의 답변이 있습니다.</h5>
-        {% for answer in question.answers.all %}
-        <div class="card my-3">
-            <div class="card-body">
-                <div class="card-text" style="white-space: pre-line;">{{ answer.content }}</div>
-                <div class="d-flex justify-content-end">
-                    <div class="badge bg-light text-dark p-2 text-start">
-                        <div class="mb-2">{{ answer.author.username }}</div>
-                        <div>{{ answer.created_at }}</div>
-                    </div>
-                </div>
-                {% if request.user == answer.author %}
-                <div class="my-3">
-                    <a href="#" class="btn btn-sm btn-outline-secondary">수정</a>
-                    <a href="#" class="btn btn-sm btn-outline-danger">삭제</a>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-        {% endfor %}
-
-        <form id="answerForm" action="{% url 'pybo:answer:create' question.id %}" method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="content" class="form-label">답변내용</label>
-                <textarea name="content" id="content" rows="15">{{ form.content.value|default_if_none:"" }}</textarea>
-
-                {% if form.content %}
-                <div class="text-danger small mt-1">
-                    {% for error in form.content.errors %}
-                        {{ error }}
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </div>
-            <button type="submit" class="btn btn-primary">등록</button>
-            <button type="button" id="list-btn" class="btn btn-dark">목록</button>
-        </form>
     </div>
+
+    <h5 class="border-bottom my-3 py-2">{{ question.answers.count|intcomma }} 개의 답변이 있습니다.</h5>
+    {% for answer in question.answers.all %}
+    <div class="card my-3">
+        <div class="card-body">
+            <div data-id="{{ answer.id }}" class="card-text" style="white-space: pre-line;">{{ answer.content }}</div>
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div class="mb-2">{{ answer.author.username }}</div>
+                    <div>{{ answer.created_at }}</div>
+                </div>
+            </div>
+            {% if request.user == answer.author %}
+            <div class="my-3">
+                <a href="#" class="btn btn-sm btn-outline-secondary answer_edit">수정</a>
+                <a href="#" class="btn btn-sm btn-outline-danger answer_delete">삭제</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+
+    <form id="answerForm" action="{% url 'pybo:answer:create' question.id %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="content" class="form-label">답변내용</label>
+            <textarea name="content" id="content" rows="15">{{ form.content.value|default_if_none:"" }}</textarea>
+
+            {% if form.content %}
+            <div class="text-danger small mt-1">
+                {% for error in form.content.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <button type="submit" id="answer_submit" class="btn btn-primary">등록</button>
+        <button type="button" id="edit_submit" class="btn btn-warning d-none">수정</button>
+        <button type="button" id="list-btn" class="btn btn-dark">목록</button>
+    </form>
+
+    {% if messages %}
+    <div class="my-3">
+        {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                <div class="text-danger small">{{ message }}</div>
+            {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                <div class="text-success small">{{ message }}</div>
+            {% else %}
+                <div class="text-secondary small">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
 {% endblock content %}
 
 {% block script %}
@@ -97,7 +108,6 @@
                     url: "{% url 'pybo:question:delete' question.id %}",
                     dataType: "json",
                     success: function (response) {
-                        console.log(response)
                         alert('삭제완료');
                         location.href = "{% url 'pybo:question:list' %}"
                     },
@@ -109,9 +119,36 @@
         });
     }
 
+    function editAnswer() {
+        $('.answer_edit').click(function (e) {
+            e.preventDefault();
+
+            let answer = $(this).parent('div').siblings('.card-text').text();
+            let id = $(this).parent('div').siblings('.card-text').data('id');
+
+            $('textarea[name="content"]').text(answer).focus();
+            $('#edit_submit').data('id', id).removeClass('d-none');
+            $('#answer_submit').addClass('d-none');
+        });
+    }
+
+    function updateAnswer() {
+        $(document).on('click', '#edit_submit', function (e) {
+            e.preventDefault();
+
+            const form = $('#answerForm');
+            let id = $(this).data('id');
+            let url = "{% url 'pybo:answer:edit' 0 %}".replace("0", id);
+
+            form.attr('action', url).submit();
+        });
+    }
+
     $(document).ready(function() {
         goToQuestionList();
         deleteQuestion();
+        editAnswer();
+        updateAnswer();
     });
 </script>
 {% endblock script %}

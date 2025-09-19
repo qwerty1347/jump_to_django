@@ -29,9 +29,7 @@ class QuestionService:
         return self.question_repository.create_question(form_data)
 
 
-    def update_question(self, request: HttpRequest, question_id: int):
-        form = QuestionCreateForm(request.POST)
-
+    def update_question(self, request: HttpRequest, form: QuestionCreateForm, question_id: int):
         if form.is_valid():
             question = self.question_repository.get_question(question_id)
 
@@ -42,7 +40,7 @@ class QuestionService:
                 form_data = form.cleaned_data
                 form_data['author'] = request.user
 
-                return self.question_repository.update_question(form.cleaned_data, question_id)
+                return self.question_repository.update_question(question_id, form_data)
 
         else:
             raise ValueError

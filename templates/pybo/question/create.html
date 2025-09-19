@@ -38,9 +38,11 @@
             </div>
             {% endif %}
         </div>
-        <button type="submit" class="btn btn-primary">
-            {{ form.instance.pk|yesno:"수정,등록" }}
-        </button>
+        {% if form.instance.pk %}
+        <button type="submit" class="btn btn-warning">수정</button>
+        {% else %}
+        <button type="submit" class="btn btn-primary">등록</button>
+        {% endif %}
         <button type="button" id="list-btn" class="btn btn-dark">목록</button>
     </form>
 
@@ -61,17 +63,17 @@
 {% endblock content %}
 
 {% block script %}
-    <script>
-        function goToQuestionList() {
-            $('#list-btn').click(function (e) {
-                e.preventDefault();
-                const questionList = "{% url 'pybo:question:list' %}";
-                location.href = questionList;
-            });
-        }
-
-        $(document).ready(function () {
-            goToQuestionList();
+<script>
+    function goToQuestionList() {
+        $('#list-btn').click(function (e) {
+            e.preventDefault();
+            const questionList = "{% url 'pybo:question:list' %}";
+            location.href = questionList;
         });
-    </script>
+    }
+
+    $(document).ready(function () {
+        goToQuestionList();
+    });
+</script>
 {% endblock script %}

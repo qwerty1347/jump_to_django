@@ -23,7 +23,8 @@ def modify_question(request: HttpRequest, question_id: int):
             return render(request, TemplateConstants.PYBO['question']['create'], {"form": form})
 
         elif request.method == "POST":
-            question = question_service.update_question(request, question_id)
+            form = QuestionCreateForm(request.POST)
+            question = question_service.update_question(request, form, question_id)
             messages.success(request, "질문이 수정되었습니다.")
             return redirect('pybo:question:detail', question_id=question.id)
 
@@ -40,4 +41,5 @@ def modify_question(request: HttpRequest, question_id: int):
 
     except Exception as e:
         handle_exception(e)
-        messages.error(request, "질문 수정 오류 발생")
+        messages.error(request, "질문 수정 오류")
+        return render(request, TemplateConstants.PYBO['question']['create'], {'form': form})

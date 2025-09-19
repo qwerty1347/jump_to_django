@@ -23,7 +23,7 @@ class QuestionRepository:
         return Question.objects.create(**form_data)
 
 
-    def update_question(self, form_data: dict, question_id: int) -> Question:
+    def update_question(self, question_id: int, form_data: dict) -> Question:
         question = Question.objects.get(pk=question_id)
 
         for field, value in form_data.items():
