@@ -17,8 +17,8 @@ question_service = QuestionService()
 @require_http_methods(["DELETE"])
 def delete_question(request: HttpRequest, question_id: int) -> JsonResponse:
     try:
-        question_service.delete_question(request, question_id)
-        return success_response()
+        affected_rows = question_service.delete_question(request, question_id)
+        return success_response({"affected_rows": affected_rows})
 
     except Http404:
         return error_response(HTTPStatus.NOT_FOUND.value, "존재하지 않는 게시물입니다.")

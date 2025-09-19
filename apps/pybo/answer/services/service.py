@@ -44,3 +44,13 @@ class AnswerService:
 
         else:
             raise ValueError
+
+
+    def delete_answer(self, request, answer_id):
+        answer = self.answer_repository.get_answer(answer_id)
+
+        if request.user != answer.author:
+            raise PermissionDenied()
+
+        else:
+            return self.answer_repository.delete_answer(answer_id)

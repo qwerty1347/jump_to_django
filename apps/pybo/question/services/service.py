@@ -53,4 +53,4 @@ class QuestionService:
             raise PermissionDenied()
 
         else:
-            self.question_repository.delete_question(question_id)
+            return self.question_repository.delete_question(question_id)

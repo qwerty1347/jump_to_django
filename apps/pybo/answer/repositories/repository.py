@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 from apps.pybo.answer.forms.create import AnswerCreateForm
 from apps.pybo.answer.models.answer import Answer
@@ -31,3 +32,7 @@ class AnswerRepository:
 
         answer.save()
         return answer
+
+
+    def delete_answer(self, answer_id: int) -> int:
+        return Answer.objects.filter(pk=answer_id).update(is_active=False, deleted_at=timezone.now())

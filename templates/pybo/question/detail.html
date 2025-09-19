@@ -101,8 +101,6 @@
             e.preventDefault();
 
             if (confirm('정말로 삭제하시겠습니까?')) {
-                const id = $(this).data('id');
-
                 $.ajax({
                     type: "delete",
                     url: "{% url 'pybo:question:delete' question.id %}",
@@ -144,11 +142,36 @@
         });
     }
 
+    function deleteAnswer() {
+        $('.answer_delete').click(function (e) {
+            e.preventDefault();
+
+            if (confirm('정말로 삭제하시겠습니까?')) {
+                let id = $(this).parent('div').siblings('.card-text').data('id');
+                let url = "{% url 'pybo:answer:delete' 0 %}".replace("0", id);
+
+                $.ajax({
+                    type: "delete",
+                    url: url,
+                    dataType: "json",
+                    success: function (response) {
+                        alert('삭제완료');
+                        location.reload()
+                    },
+                    error: function (xhr, error, status) {
+                        alert('요청 처리에 실패했습니다. ' + (xhr.responseJSON?.message ?? '관리자에게 문의해 주세요.') + ' ' + xhr.responseText);
+                    },
+                });
+            }
+        });
+    }
+
     $(document).ready(function() {
         goToQuestionList();
         deleteQuestion();
         editAnswer();
         updateAnswer();
+        deleteAnswer();
     });
 </script>
 {% endblock script %}
