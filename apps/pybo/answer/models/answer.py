@@ -10,3 +10,4 @@ class Answer(Base, TimeStamped):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="answers")
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    voter = models.ManyToManyField(User, related_name="answer_voters")
