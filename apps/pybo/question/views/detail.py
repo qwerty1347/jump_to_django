@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import render
 
 from apps.pybo.question.services.service import QuestionService
@@ -10,7 +10,7 @@ from common.utils.exception import handle_exception
 question_service = QuestionService()
 
 
-def question_detail(request, question_id: int) -> HttpResponse:
+def question_detail(request: HttpRequest, question_id: int) -> HttpResponse:
     try:
         question = question_service.get_question(question_id)
         context = {'question': question}

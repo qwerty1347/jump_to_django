@@ -1,5 +1,6 @@
 from django.contrib import messages
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 
@@ -12,8 +13,9 @@ from common.utils.exception import handle_exception
 question_service = QuestionService()
 
 
+@login_required(login_url='pybo:login')
 @require_http_methods(["GET", "POST"])
-def create_question(request) -> HttpResponse:
+def create_question(request: HttpRequest) -> HttpResponse:
     if request.method == "GET":
         form = QuestionCreateForm()
         return render(request, TemplateConstants.PYBO['question']['create'], {'form': form})
@@ -23,7 +25,7 @@ def create_question(request) -> HttpResponse:
 
         if form.is_valid():
             try:
-                question = question_service.create_question(form.cleaned_data)
+                question = question_service.create_question(form.cleaned_data, request.user)
                 messages.success(request, "질문 등록 완료")
                 return redirect('pybo:question:detail', question_id=question.id)
 

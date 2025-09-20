@@ -5,7 +5,13 @@
 {% block content %}
 <div class="container">
     <h5 class="my-3 border-bottom pb-2">질문등록</h5>
-    <form id="questionForm" method="post">
+    <form id="questionForm"
+        action="{% if form.instance.pk %}
+                    {% url 'pybo:question:edit' form.instance.pk %}
+                {% else %}
+                    {% url 'pybo:question:create' %}
+                {% endif %}"
+        method="post">
         {% csrf_token %}
         <div class="mb-3">
             <label for="subject" class="form-label">제목</label>
@@ -32,24 +38,42 @@
             </div>
             {% endif %}
         </div>
-        <button type="submit" class="btn btn-primary">등록하기</button>
+        {% if form.instance.pk %}
+        <button type="submit" class="btn btn-warning">수정</button>
+        {% else %}
+        <button type="submit" class="btn btn-primary">등록</button>
+        {% endif %}
         <button type="button" id="list-btn" class="btn btn-dark">목록</button>
     </form>
+
+    {% if messages %}
+    <div class="my-3">
+        {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                <div class="text-danger small">{{ message }}</div>
+            {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                <div class="text-success small">{{ message }}</div>
+            {% else %}
+                <div class="text-secondary small">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
 {% endblock content %}
 
 {% block script %}
-    <script>
-        function goToQuestionList() {
-            $('#list-btn').click(function (e) {
-                e.preventDefault();
-                const questionList = "{% url 'pybo:question:list' %}";
-                location.href = questionList;
-            });
-        }
-
-        $(document).ready(function () {
-            goToQuestionList();
+<script>
+    function goToQuestionList() {
+        $('#list-btn').click(function (e) {
+            e.preventDefault();
+            const questionList = "{% url 'pybo:question:list' %}";
+            location.href = questionList;
         });
-    </script>
+    }
+
+    $(document).ready(function () {
+        goToQuestionList();
+    });
+</script>
 {% endblock script %}

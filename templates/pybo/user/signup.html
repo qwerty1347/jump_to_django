@@ -1,0 +1,45 @@
+{% extends "pybo/common/base.html" %}
+
+{% block content %}
+<div class="container my-3">
+    <form action="{% url 'pybo:signup' %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="username">사용자 이름</label>
+            <input type="text" class="form-control" name="username" id="username" value="{{ form.username.value|default_if_none:"" }}">
+            {% for error in form.username.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label for="password1">비밀번호</label>
+            <input type="password" class="form-control" name="password1" id="password1" value="{{ form.password1.value|default_if_none:"" }}">
+
+            {% for error in form.password1.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label for="password2">비밀번호 확인</label>
+            <input type="password" class="form-control" name="password2" id="password2" value="{{ form.password2.value|default_if_none:"" }}">
+
+            {% for error in form.password2.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label for="email">이메일</label>
+            <input type="email" class="form-control" name="email" id="email" value="{{ form.email.value|default_if_none:"" }}">
+
+            {% for error in form.email.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">가입하기</button>
+    </form>
+</div>
+{% endblock content %}
