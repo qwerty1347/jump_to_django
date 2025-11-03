@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-{% include "common/base/head.html" %}
-{% block head %}{% endblock head %}
-</head>
+    <head>
+    {% include "common/head.html" %}
+    {% block head %}{% endblock head %}
+    </head>
 
-<body>
-{% include "pybo/common/nav.html" %}
-{% block content %}{% endblock content %}
-{% block script %}{% endblock script %}
-</body>
+    <body>
+    {% include "pybo/common/nav.html" %}
+    {% block content %}{% endblock content %}
+    {% block script %}{% endblock script %}
+    </body>
 </html>
