@@ -96,13 +96,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+hostname = socket.gethostname()
+is_docker = "jump_to_django" in hostname
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': env('DB_DATABASE'),
         'USER': env('DB_USERNAME'),
         'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
+        'HOST': "jump_to_django-mysql" if is_docker else env('DB_HOST'),
         'PORT': int(env('DB_PORT')),
     }
 }
